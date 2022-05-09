@@ -1,0 +1,18 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Styles",
+            "type": "shell",
+            //"command": ".\\vendor\\bin\\pscss -s compressed .\\www\\scss\\materialize.scss >.\\www\\css\\materialize.css;.\\vendor\\bin\\pscss -s compressed .\\www\\scss\\main.scss >.\\www\\css\\main.css",
+            "command": ".\\vendor\\bin\\pscss -s compressed .\\www\\scss\\main.scss >.\\www\\css\\main.css",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>{ifset title}{include title|stripHtml} | {/ifset}SRP</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="/css/materialize.css" rel="stylesheet">
+        <link href="/css/main.css" rel="stylesheet">
+    </head>
+    <body class="grey lighten-3">
+        <header>
+            {* Top navbar *}
+            <nav class="nav-extended">
+                <div class="nav-wrapper blue darken-3">
+                    <a n:href="Homepage:default" class="brand-logo">SRP</a>
+                    <div class="right">
+                        <a href="#" class="logout_link">Odhlásit</a> (admin) {* TODO: Add link *}
+                    </div>
+                </div>
+                {ifset title}
+                    <div class="nav-content blue darken-1">
+                        <a href="#" class="back_link"><i class="material-icons">arrow_back</i> {include title|stripHtml}</a> {* TODO: Add link *}
+                    </div>
+                {/ifset}
+            </nav>
+            
+            {* Left sidebar *}
+            <ul class="sidenav sidenav-fixed blue darken-3">
+                {var $menu = [
+                    "dehaze" => null, /* TODO: Add link */
+                    "dashboard" => null, /* TODO: Add link */
+                    "group" => null, /* TODO: Add link */
+                    "new_releases" => null, /* TODO: Add link */
+                    "local_offer" => "Brand:default",
+                ]}
+                {foreach $menu as $icon => $link}
+                    {if isset($link) && $presenter->isLinkCurrent($link)}
+                        {var $link = null}
+                        <li class="blue darken-2">
+                    {else}
+                        <li>
+                    {/if}
+                    {ifset $link}
+                        <a href="{plink $link}">
+                    {else}
+                        <a href="#">
+                    {/ifset}
+                            <i class="material-icons">{$icon}</i>
+                        </a>
+                    </li>
+                {/foreach}
+            </ul>
+        </header>
+        
+        {* Render content *}
+        <main>
+            <div class="card z-depth-0">
+                <div class="card-content">
+                    {include content}
+                </div>
+            </div>
+        </main>
+        
+        {* Render modals *}
+        {foreach $presenter->getModals() as $modal}
+            {$modal|noescape}
+        {/foreach}
+        
+        {block scripts}
+            <script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
+            <script src="/js/materialize.min.js"></script>
+            
+            {* Show flashes as toasts *}
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    {foreach $flashes as $flash}
+                        M.toast({
+                            html: {$flash->message},
+                            {switch $flash->type}
+                                {case "info"}
+                                    classes: "blue",
+                                {case "success"}
+                                    classes: "green",
+                                {case "warning"}
+                                    classes: "yellow",
+                                {case "error"}
+                                    classes: "red",
+                            {/switch}
+                        });
+                    {/foreach}
+                });
+            </script>
+            
+            {* Initialize modals *}
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    var elems = document.querySelectorAll('.modal');
+                    var instances = M.Modal.init(elems, {});
+                });
+            </script>
+        {/block}
+    </body>
+</html>

@@ -1,0 +1,45 @@
+{*
+    @param string  $form         Form template name
+    @param string  $component    Component name
+    @param string  $subject      Action subject
+    @param array   $data         Item data
+    @param boolean $readonly     Form readonly
+*}
+
+{switch $component}
+    {case "create"}
+        {var $title = "Přidat"}
+        {var $button = "create"}
+        {var $color = "green"}
+    {case "update"}
+        {var $title = "Upravit"}
+        {var $button = "simple"}
+        {var $color = "blue"}
+    {case "delete"}
+        {var $title = "Smazat"}
+        {var $button = "simple"}
+        {var $color = "red"}
+    {default}
+        {var $title = "Zpracovat"}
+        {var $button = "simple"}
+        {var $color = "grey"}
+{/switch}
+
+{* Get unique prefix *}
+{var $prefix = $component . (isset($data) ? "_" . $data["id"] : "")}
+
+{* Render button/link *}
+{include "button/" . $button . ".latte", prefix: $prefix, title: $title, subject: $subject}
+
+{* Build form *}
+{capture $formContent}
+    {include "../forms/" . $form . ".latte", component: $component, prefix: $prefix, data: $data, readonly: $readonly}
+{/capture}
+
+{* Build modal *}
+{capture $modalContent}
+    {include "style/form.latte", prefix: $prefix, title: $title, subject: $subject, content: $formContent, color: $color}
+{/capture}
+
+{* Register modal *}
+{php $presenter->addModal($modalContent)}

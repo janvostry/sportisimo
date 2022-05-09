@@ -1,0 +1,12 @@
+{*
+    @param string  $component    Component name
+    @param array   $data         Item data
+    @param boolean $readonly     Form readonly
+*}
+
+{include "builder.latte",
+    form: "brand",
+    component: $component,
+    subject: "značku",
+    data: $data,
+    readonly: $readonly}

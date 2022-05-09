@@ -1,0 +1,84 @@
+{block title}Značky{/block}
+
+
+{block content}
+<div class="actions-main">
+    {* Create *}
+    {include "../../modals/brand.latte",
+        component: "create",
+        data: null,
+        readonly: false}
+</div>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Název
+                    <a n:href="this sort => 'asc'" {if $sorting !== "desc"}class="active"{/if}><i class="material-icons">arrow_upward</i></a>
+                    <a n:href="this sort => 'desc'" {if $sorting === "desc"}class="active"{/if}><i class="material-icons">arrow_downward</i></a>
+                </th>
+                <th class="right-align">Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $items as $item}
+                <tr>
+                    <td>{$item["name"]}</td>
+                    <td class="right-align actions">
+                        {* Delete *}
+                        {include "../../modals/brand.latte",
+                            component: "delete",
+                            data: $item,
+                            readonly: true}
+                        
+                        {* Update *}
+                        {include "../../modals/brand.latte",
+                            component: "update",
+                            data: $item,
+                            readonly: false}
+                    </td>
+                </tr>
+            {/foreach}
+        </tbody>
+    </table>
+</div>
+
+{ifset $paginator}
+    <div class="pagination">
+        <div class="right-align">
+            <ul>
+                {if !$paginator->isFirst()}
+                    <li><a n:href="this page => $paginator->getPage() - 1"><i class="material-icons">chevron_left</i></a></li>
+                {/if}
+                {var $bleed = 5}
+                {var $previous = true}
+                {for $page = 1; $page <= $paginator->getPageCount(); $page++}
+                    {var $aroundFirst = $page == $paginator->getFirstPage()}
+                    {var $aroundPage = $page > ($paginator->getPage() - $bleed)  && $page < ($paginator->getPage() + $bleed)}
+                    {var $aroundLast = $page == $paginator->getLastPage()}
+                    {var $current = $aroundFirst || $aroundPage || $aroundLast}
+                    {if $current}
+                        <li><a n:href="this page => $page" {if $paginator->getPage() === $page}class="active"{/if}>{$page}</a></li>
+                    {elseif $previous}
+                        <li class="spacer">...</li>
+                    {/if}
+                    {var $previous = $current}
+                {/for}
+                {if !$paginator->isLast()}
+                    <li><a n:href="this page => $paginator->getPage() + 1"><i class="material-icons">chevron_right</i></a></li>
+                {/if}
+            </ul>
+        </div>
+
+        <div class="right-align">
+            <ul>
+                {var $limits = [10, 25, 50, 100]}
+                {foreach $limits as $limit}
+                    <li><a n:href="this page => 1, limit => $limit" {if $paginator->getItemsPerPage() === $limit}class="active"{/if}>{$limit}</a></li>
+                {/foreach}
+            </ul>
+        </div>
+    </div>
+{/ifset}

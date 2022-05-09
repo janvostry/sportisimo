@@ -1,0 +1,21 @@
+{*
+    @param string  $component    Component name
+    @param string  $prefix       Global prefix
+    @param array   $data         Item data
+    @param boolean $readonly     Form readonly
+*}
+
+<form id="form_{$prefix}" n:name="$component">
+    {* Name *}
+    <div class="row">
+        <div class="input-field col s12">
+            <input type="text" class="validate" id="input_{$prefix}_name" n:name="name" {ifset $data}value="{$data[name]}"{/ifset} {if $readonly}readonly{/if}>
+            <label for="input_{$prefix}_name">Název</label>
+        </div>
+    </div>
+    
+    {* Index *}
+    {ifset $data}
+        <input type="hidden" n:name="index" value="{$data[id]}">
+    {/ifset}
+</form>

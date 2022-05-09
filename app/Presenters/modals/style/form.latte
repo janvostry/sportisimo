@@ -1,0 +1,18 @@
+{*
+    @param string $prefix     Global prefix
+    @param string $title      Action name
+    @param string $subject    Action subject
+    @param string $content    Form content
+    @param string $color      Button color class
+*}
+
+<div id="modal_{$prefix}" class="modal">
+    <div class="modal-content">
+        <h4>{$title} {$subject}</h4>
+        {$content|noescape}
+    </div>
+    <div class="modal-footer">
+        <button href="#" class="waves-effect waves-light {$color} lighten-3 btn-flat" onclick="document.getElementById('form_' + {$prefix}).submit()">{$title}</button>
+        <button class="waves-effect waves-light grey lighten-3 btn-flat modal-close">Zrušit</button>
+    </div>
+</div>
